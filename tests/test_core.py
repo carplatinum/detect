@@ -1,9 +1,5 @@
 import pytest
-from django.urls import reverse
-from core.models import Image
-from users.models import CustomUser
 from django.core.files.uploadedfile import SimpleUploadedFile
-from rest_framework.test import APIClient
 from io import BytesIO
 from PIL import Image as PILImage
 
@@ -20,6 +16,7 @@ def create_test_image_file():
 
 @pytest.mark.django_db
 def test_create_image_model(create_test_image_file):
+    from core.models import Image
     img = Image.objects.create(
         original_image=create_test_image_file,
         text_original="Hello",
@@ -32,11 +29,13 @@ def test_create_image_model(create_test_image_file):
 
 @pytest.fixture
 def _user():
+    from users.models import CustomUser
     return CustomUser.objects.create_user(username='testuser', password='testpass123')
 
 
 @pytest.fixture
 def api_client(_user):
+    from rest_framework.test import APIClient
     client = APIClient()
     client.force_authenticate(user=_user)
     return client
@@ -44,6 +43,8 @@ def api_client(_user):
 
 @pytest.mark.django_db
 def test_upload_image_and_start_task(api_client, create_test_image_file):
+    from django.urls import reverse
+    from core.models import Image
     url = reverse("image-list")
     data = {
         "original_image": create_test_image_file,
@@ -55,12 +56,12 @@ def test_upload_image_and_start_task(api_client, create_test_image_file):
     assert "task_id" in response.data
     img_id = response.data["id"]
     image = Image.objects.get(id=img_id)
-    # Проверяем, что имя файла заканчивается на '.jpg', а не на конкретное 'test.jpg'
     assert image.original_image.name.endswith(".jpg")
 
 
 @pytest.mark.django_db
 def test_get_task_status(api_client):
+    from django.urls import reverse
     url_task = reverse("image-task-status", kwargs={"task_id": "fake-task-id"})
     response = api_client.get(url_task)
     assert response.status_code == 200
@@ -69,6 +70,9 @@ def test_get_task_status(api_client):
 
 @pytest.mark.django_db
 def test_user_auth_creation_and_jwt_token():
+    from users.models import CustomUser
+    from django.urls import reverse
+    from rest_framework.test import APIClient
     user = CustomUser.objects.create_user(username="authuser", password="authpass123")
     assert user is not None
     client = APIClient()
