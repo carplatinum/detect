@@ -92,7 +92,9 @@ jobs:
         run: poetry run flake8
 
       - name: Run tests (pytest)
-        run: poetry run pytest -v --maxfail=1 --disable-warnings
+        run: |
+          export PYTHONPATH="${{ github.workspace }}" 
+          poetry run pytest -v --maxfail=1 --disable-warnings
 
   docker-build:
     runs-on: ubuntu-latest
