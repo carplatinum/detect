@@ -48,7 +48,7 @@ def test_upload_image_and_start_task(api_client, create_test_image_file):
     url = reverse("image-list")
     data = {
         "original_image": create_test_image_file,
-        "text_original": "Пример оригинального текста"
+        "text_original": "[translate:Пример оригинального текста]"
     }
     response = api_client.post(url, data, format='multipart')
     print(response.data)
