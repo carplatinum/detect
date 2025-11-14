@@ -37,7 +37,7 @@ jobs:
       POSTGRES_DB: detect_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1234
-      POSTGRES_HOST: db          # Используем имя сервиса docker-compose
+      POSTGRES_HOST: localhost         # Используем имя сервиса docker-compose
       POSTGRES_PORT: 5432
       REDIS_URL: redis://redis:6379/0    # Используем имя сервиса docker-compose
       DJANGO_SETTINGS_MODULE: config.settings
