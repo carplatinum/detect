@@ -108,7 +108,7 @@ docker-compose logs -f nginx
 docker-compose restart celery
 
 # Контакты и поддержка
-Email: mymillions@ya.ru
+Email: mymillions@ya.ru 
 
 Репозиторий GitHub: https://github.com/carplatinum/detect
 
